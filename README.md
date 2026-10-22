@@ -21,3 +21,10 @@ Pilot. Javascript er ikke verifisert mot et ekte Trimble-prosjekt. **Test kun i 
 Logoen `assets/norconsult-logo.svg` er en **plassholder fra BIM_proto**, ikke en godkjent offisiell logofil. Erstatt ved produksjonssetting.
 
 Kilde: https://github.com/TrekASB/BIM_proto/blob/main/apps/bcf-topic-pulse.html
+
+## Direkte redigering (2026-10-22)
+Velg en sak i tabellen. Panelet **Rediger sak** støtter status, prioritet, ansvarlig, fag/etiketter (`labels`) og tidsfrist, samt en egen handling for å opprette kommentarer. Status og prioritet kan også endres direkte i tabellen. Lagre-knappen utfører `GET topic → PUT topic → GET topic` og bekrefter returnerte felt. Kommentarer legges til med `POST .../comments` og kommentarer leses tilbake. Masseoppdatering bruker samme verifikasjonsrutine.
+
+**Pilot / begrensninger:** Test skrivetilgang på én test-sak. API-et håndhever prosjekt-/brukerrettigheter; vanligvis kan prosjektadministrator eller oppretter/ansvarlig redigere. Feltverdier må være godkjent i prosjektets BCF-innstillinger. Fag bruker `labels`, så behold eksisterende ikke-fag-relaterte labels ved redigering. Egendefinerte/ugyldige tags eller en e-post som ikke er bruker i prosjektet kan bli avvist. Manglende/blank tidsfrist sendes som `null`; test at Trimble aksepterer dette. Dette er ikke en webhook eller pushbasert sanntidsintegrasjon: lagringer går direkte til API-et, og endringer gjort av andre hentes ved **Oppdater**.
+
+**Viktig:** Ingen API-skriving er testet med en ekte Trimble-konto i utviklingsmiljøet. Før produksjonsbruk må oppdatering av status, prioritet, assignee, labels, due date og kommentarer valideres i et testprosjekt.
