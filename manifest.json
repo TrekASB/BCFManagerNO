@@ -1,0 +1,9 @@
+{
+  "url": "https://trekasb.github.io/BCFManagerNO/index.html",
+  "title": "BCFManager",
+  "icon": "https://trekasb.github.io/BCFManagerNO/assets/icon.svg",
+  "description": "BCF sakshåndtering med tabell og separat bildevisning",
+  "extensionType": [
+    "3dviewer"
+  ]
+}
