@@ -19,7 +19,7 @@ window.addEventListener('message',async event=>{
  if(m.kind==='hello'){send({kind:'ready',project:{id:project.id,name:project.name}});return}
  if(m.kind!=='request'||!token)return;
  const allowedMethods=['GET','PUT','POST'];const method=(m.method||'GET').toUpperCase();const sub=String(m.path||'');
- if(!allowedMethods.includes(method)||(!/^\/topics(?:\/[a-fA-F0-9-]+(?:\/(?:comments|viewpoints)(?:\/[a-fA-F0-9-]+(?:\/snapshot)?)?)?)?$/.test(sub)&&sub!=='/topics')) {send({kind:'reply',id:m.id,error:'Ugyldig API-sti'});return}
+ if(!allowedMethods.includes(method)||(!/^\/topics(?:\/[a-fA-F0-9-]+(?:\/(?:comments|viewpoints)(?:\/[a-fA-F0-9-]+(?:\/snapshot)?)?)?)?$/.test(sub)&&sub!=='/topics'&&sub!=='/extensions')) {send({kind:'reply',id:m.id,error:'Ugyldig API-sti'});return}
  if(method!=='GET'&&!m.confirmed){send({kind:'reply',id:m.id,error:'Skrivetillatelse mangler'});return}
  const url=BASE+encodeURIComponent(project.id)+sub;
  try{const headers={Authorization:'Bearer '+token,Accept:m.binary?'image/png':'application/json'};
