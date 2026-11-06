@@ -10,7 +10,7 @@ async function connect(){try{
  api=await TrimbleConnectWorkspace.connect(window.parent,(event,args)=>{if(event==='extension.accessToken'){token=pickToken(args);if(token){status('Klar – tilgang mottatt');$('open').disabled=false;send({kind:'ready',project})}}});
  project=await api.project.getCurrentProject();
  // Bare Utforsker: registrer navigasjonsmenyen i prosjektvisningen.
- await api.ui.setMenu({title:'NoMasterBCFManager',icon:'https://trekasb.github.io/BCFManagerNO/assets/icon.svg',command:'bcfmanager_open'});
+ try{await api.ui.setMenu({title:'NoMasterBCFManager',icon:'https://trekasb.github.io/BCFManagerNO/assets/icon.svg',command:'bcfmanager_open'});}catch(menuError){console.warn('Kunne ikke registrere Utforsker-meny:',menuError)}
  $('project').textContent=project?.name||project?.id||'Ukjent';
  const v=await api.extension.requestPermission('accesstoken');token=pickToken(v);
  if(token){status('Klar – åpne saksbehandling');$('open').disabled=false}else status('Venter på tilgang til access token. Godkjenn forespørselen i Trimble Connect.');
