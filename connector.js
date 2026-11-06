@@ -9,6 +9,19 @@ async function connect(){try{
  if(!window.TrimbleConnectWorkspace||window.parent===window)throw Error('Åpne extensionen fra Trimble Connect Utforsker.');
  api=await TrimbleConnectWorkspace.connect(window.parent,(event,args)=>{if(event==='extension.accessToken'){token=pickToken(args);if(token){status('Klar – tilgang mottatt');$('open').disabled=false;send({kind:'ready',project})}}});
  project=await api.project.getCurrentProject();
+ // Prosjektmeny for Utforsker. Ingen 3D-visningskommandoer eller automatisk navigasjon.
+ try{
+   await api.ui.setMenu({
+     title:'NoMasterBCFManager',
+     icon:'https://trekasb.github.io/BCFManagerNO/assets/icon.svg',
+     command:'nomasterbcfmanager_project_menu',
+     subMenus:[{
+       title:'Sakshåndtering',
+       icon:'https://trekasb.github.io/BCFManagerNO/assets/icon.svg',
+       command:'nomasterbcfmanager_project_topics'
+     }]
+   });
+ }catch(menuError){console.warn('Kunne ikke registrere prosjektmeny:',menuError)}
  $('project').textContent=project?.name||project?.id||'Ukjent';
  const v=await api.extension.requestPermission('accesstoken');token=pickToken(v);
  if(token){status('Klar – åpne saksbehandling');$('open').disabled=false}else status('Venter på tilgang til access token. Godkjenn forespørselen i Trimble Connect.');
