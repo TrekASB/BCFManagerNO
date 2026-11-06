@@ -6,9 +6,9 @@ const $=id=>document.getElementById(id), status=t=>$('status').textContent=t;
 function pickToken(p){const v=p?.data??p;return typeof v==='string'&&!['pending','denied'].includes(v)?v:(v?.accessToken||v?.access_token||null)}
 function send(msg){if(popup&&!popup.closed)popup.postMessage({...msg,channel},ORIGIN)}
 async function connect(){try{
- if(!window.TrimbleConnectWorkspace||window.parent===window)throw Error('Åpne extensionen fra Trimble Connect 3D Viewer.');
+ if(!window.TrimbleConnectWorkspace||window.parent===window)throw Error('Åpne extensionen fra Trimble Connect Utforsker eller 3D-visning.');
  api=await TrimbleConnectWorkspace.connect(window.parent,(event,args)=>{if(event==='extension.accessToken'){token=pickToken(args);if(token){status('Klar – tilgang mottatt');$('open').disabled=false;send({kind:'ready',project})}}});
- project=await api.project.getCurrentProject();$('project').textContent=project?.name||project?.id||'Ukjent';
+ project=await api.project.getProject();try{await api.ui.setMenu({title:'NoMasterBCFManager',icon:'https://trekasb.github.io/BCFManagerNO/assets/icon.svg',command:'bcfmanager_open'});await api.ui.setActiveMenuItem('bcfmanager_open')}catch(e){console.info('Prosjektmeny ikke tilgjengelig i denne visningen:',e)}$('project').textContent=project?.name||project?.id||'Ukjent';
  const v=await api.extension.requestPermission('accesstoken');token=pickToken(v);
  if(token){status('Klar – åpne saksbehandling');$('open').disabled=false}else status('Venter på tilgang til access token. Godkjenn forespørselen i Trimble Connect.');
  }catch(e){status('Feil: '+e.message)}}
